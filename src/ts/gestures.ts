@@ -11,16 +11,16 @@ var _gestureStartTime,
 	_gestureCheckSpeedTime,
 
 	// pool of objects that are used during dragging of zooming
-	p = {}, // first point
-	p2 = {}, // second point (for zoom gesture)
-	delta = {},
-	_currPoint = {},
-	_startPoint = {},
+	p: Point = {}, // first point
+	p2: Point = {}, // second point (for zoom gesture)
+	delta: Point = {},
+	_currPoint: Point = {},
+	_startPoint: Point = {},
 	_currPointers = [],
-	_startMainScrollPos = {},
+	_startMainScrollPos: Point = {},
 	_releaseAnimData,
-	_posPoints = [], // array of points during dragging, used to determine type of gesture
-	_tempPoint = {},
+	_posPoints: Point[] = [], // array of points during dragging, used to determine type of gesture
+	_tempPoint: Point = {},
 
 	_isZoomingIn,
 	_verticalDragInitiated,
@@ -95,7 +95,7 @@ var _gestureStartTime,
 	  	return _closestElement(el.parentNode, fn);
 	},
 
-	_preventObj = {},
+	_preventObj: {prevent?} = {},
 	_preventDefaultEventBehaviour = function(e, isDown) {
 	    _preventObj.prevent = !_closestElement(e.target, _options.isClickableElement);
 
@@ -130,7 +130,7 @@ var _gestureStartTime,
 
 	
 	// points pool, reused during touch events
-	_ePoint1 = {},
+	_ePoint1: PointWithId = {},
 	_ePoint2 = {},
 	_tempPointsArr = [],
 	_tempCounter,
@@ -803,7 +803,7 @@ var _gestureStartTime,
 			tempReleasePos;
 
 		// s = this
-		var s = {
+		var s: S = {
 			lastFlickOffset: {},
 			lastFlickDist: {},
 			lastFlickSpeed: {},
@@ -840,7 +840,7 @@ var _gestureStartTime,
 				s.speedDecelerationRatio[axis] = 1;
 			},
 
-			calculateOverBoundsAnimOffset: function(axis, speed) {
+			calculateOverBoundsAnimOffset: function(axis, speed?) {
 				if(!s.backAnimStarted[axis]) {
 
 					if(_panOffset[axis] > _currPanBounds.min[axis]) {
@@ -886,7 +886,7 @@ var _gestureStartTime,
 
 				}
 			},
-
+      now: undefined,
 			panAnimLoop: function() {
 				if ( _animations.zoomPan ) {
 					_animations.zoomPan.raf = _requestAF(s.panAnimLoop);
@@ -1088,7 +1088,7 @@ _registerModule('Gestures', {
 		initGestures: function() {
 
 			// helper function that builds touch/pointer/mouse events
-			var addEventNames = function(pref, down, move, up, cancel) {
+			var addEventNames = function(pref, down, move, up, cancel?) {
 				_dragStartEvent = pref + down;
 				_dragMoveEvent = pref + move;
 				_dragEndEvent = pref + up;

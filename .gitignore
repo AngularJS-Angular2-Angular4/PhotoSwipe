@@ -29,9 +29,7 @@ website/dist/
 /.idea
 .node-version
 .sass-cache/
-
-
-
-
+src/js
 /.settings/
 /.project
+

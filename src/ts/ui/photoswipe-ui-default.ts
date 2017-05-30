@@ -4,6 +4,7 @@
 * Built just using public methods/properties of PhotoSwipe.
 * 
 */
+declare var define, exports, module
 (function (root, factory) { 
 	if (typeof define === 'function' && define.amd) {
 		define(factory);
@@ -782,7 +783,7 @@ var PhotoSwipeUI_Default =
 
 	ui.supportsFullscreen = function() {
 		var d = document;
-		return !!(d.exitFullscreen || d.mozCancelFullScreen || d.webkitExitFullscreen || d.msExitFullscreen);
+		return !!(d.exitFullscreen || (<any>d).mozCancelFullScreen || d.webkitExitFullscreen || (<any>d).msExitFullscreen);
 	};
 
 	ui.getFullscreenAPI = function() {
@@ -798,7 +799,7 @@ var PhotoSwipeUI_Default =
 				eventK: tF
 			};
 
-		} else if(dE.mozRequestFullScreen ) {
+		} else if((<any>dE).mozRequestFullScreen ) {
 			api = {
 				enterK: 'mozRequestFullScreen',
 				exitK: 'mozCancelFullScreen',
@@ -816,7 +817,7 @@ var PhotoSwipeUI_Default =
 				eventK: 'webkit' + tF
 			};
 
-		} else if(dE.msRequestFullscreen) {
+		} else if((<any>dE).msRequestFullscreen) {
 			api = {
 				enterK: 'msRequestFullscreen',
 				exitK: 'msExitFullscreen',
@@ -832,7 +833,7 @@ var PhotoSwipeUI_Default =
 				_options.closeOnScroll = false; 
 
 				if(this.enterK === 'webkitRequestFullscreen') {
-					pswp.template[this.enterK]( Element.ALLOW_KEYBOARD_INPUT );
+					pswp.template[this.enterK]( (<any>Element).ALLOW_KEYBOARD_INPUT );
 				} else {
 					return pswp.template[this.enterK](); 
 				}

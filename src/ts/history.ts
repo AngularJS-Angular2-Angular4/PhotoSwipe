@@ -49,7 +49,7 @@ var _historyUpdateTimeout,
 	// gid - Gallery index
 	_parseItemIndexFromURL = function() {
 		var hash = _getHash(),
-			params = {};
+			params: any = {};
 
 		if(hash.length < 5) { // pid=1
 			return params;

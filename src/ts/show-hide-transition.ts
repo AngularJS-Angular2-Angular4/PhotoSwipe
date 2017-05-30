@@ -11,7 +11,7 @@
 
 
 var _showOrHideTimeout,
-	_showOrHide = function(item, img, out, completeFn) {
+	_showOrHide = function(item, img, out?, completeFn?) {
 
 		if(_showOrHideTimeout) {
 			clearTimeout(_showOrHideTimeout);

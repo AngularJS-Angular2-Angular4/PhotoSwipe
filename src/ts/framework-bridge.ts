@@ -7,7 +7,7 @@
  */
 var framework = {
 	features: null,
-	bind: function(target, type, listener, unbind) {
+	bind: function(target, type, listener, unbind?) {
 		var methodName = (unbind ? 'remove' : 'add') + 'EventListener';
 		type = type.split(' ');
 		for(var i = 0; i < type.length; i++) {
@@ -19,7 +19,7 @@ var framework = {
 	isArray: function(obj) {
 		return (obj instanceof Array);
 	},
-	createEl: function(classes, tag) {
+	createEl: function(classes?, tag?) {
 		var el = document.createElement(tag || 'div');
 		if(classes) {
 			el.className = classes;
@@ -63,7 +63,7 @@ var framework = {
 		}
 		return -1;
 	},
-	extend: function(o1, o2, preventOverwrite) {
+	extend: function(o1, o2, preventOverwrite?) {
 		for (var prop in o2) {
 			if (o2.hasOwnProperty(prop)) {
 				if(preventOverwrite && o1.hasOwnProperty(prop)) {
@@ -125,10 +125,11 @@ var framework = {
 		if(framework.features) {
 			return framework.features;
 		}
+    
 		var helperEl = framework.createEl(),
 			helperStyle = helperEl.style,
 			vendor = '',
-			features = {};
+			features: Features = <any>{};
 
 		// IE8 and below
 		features.oldIE = document.all && !document.addEventListener;
@@ -159,8 +160,8 @@ var framework = {
 			if (/iP(hone|od)/.test(navigator.platform)) {
 				var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
 				if(v && v.length > 0) {
-					v = parseInt(v[1], 10);
-					if(v >= 1 && v < 8 ) {
+					let v2 = parseInt(v[1], 10);
+					if(v2 >= 1 && v2 < 8 ) {
 						features.isOldIOSPhone = true;
 					}
 				}
@@ -172,7 +173,7 @@ var framework = {
 			
 			var match = ua.match(/Android\s([0-9\.]*)/);
 			var androidversion =  match ? match[1] : 0;
-			androidversion = parseFloat(androidversion);
+			androidversion = parseFloat(<any>androidversion);
 			if(androidversion >= 1 ) {
 				if(androidversion < 4.4) {
 					features.isOldAndroid = true; // for fixed position bug & performance

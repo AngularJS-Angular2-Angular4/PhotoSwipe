@@ -5,7 +5,7 @@
 */
 
 var _items,
-	_tempPanAreaSize = {},
+	_tempPanAreaSize: Point = {},
 	_imagesToAppendPool = [],
 	_initialContentSet,
 	_initialZoomRunning,
@@ -50,7 +50,7 @@ var _getItemAt,
 		bounds.min.x = (realPanElementW > _tempPanAreaSize.x) ? 0 : bounds.center.x;
 		bounds.min.y = (realPanElementH > _tempPanAreaSize.y) ? item.vGap.top : bounds.center.y;
 	},
-	_calculateItemSize = function(item, viewportSize, zoomLevel) {
+	_calculateItemSize = function(item, viewportSize, zoomLevel?) {
 
 		if (item.src && !item.loadError) {
 			var isInitial = !zoomLevel;
@@ -120,7 +120,7 @@ var _getItemAt,
 	
 
 
-	_appendImage = function(index, item, baseDiv, img, preventAnimation, keepPlaceholder) {
+	_appendImage = function(index, item, baseDiv, img, preventAnimation, keepPlaceholder?) {
 		
 
 		if(item.loadError) {
@@ -173,7 +173,7 @@ var _getItemAt,
 
 		return img;
 	},
-	_checkForError = function(item, cleanUp) {
+	_checkForError = function(item, cleanUp?) {
 		if(item.src && item.loadError && item.container) {
 
 			if(cleanUp) {
@@ -185,7 +185,7 @@ var _getItemAt,
 			
 		}
 	},
-	_setImageSize = function(item, img, maxRes) {
+	_setImageSize = function(item, img?, maxRes?) {
 		if(!item.src) {
 			return;
 		}
@@ -437,9 +437,6 @@ _registerModule('Controller', {
 					item.placeholder = placeholder;
 
 				}
-				
-
-				
 
 				if(!item.loading) {
 					_preloadImage(item);

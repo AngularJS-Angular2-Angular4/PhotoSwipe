@@ -1,6 +1,11 @@
 //function(template, UiClass, items, options)
 
-var self = this;
+declare var template
+declare var UiClass
+declare var items
+declare var options
+
+var self: PhotoSwipe = <any> this;
 
 /**
  * Static vars, don't change unless you know what you're doing.
@@ -11,7 +16,7 @@ var DOUBLE_TAP_RADIUS = 25,
 /**
  * Options
  */
-var _options = {
+var _options: Options = {
 	allowPanToNext:true,
 	spacing: 0.12,
 	bgOpacity: 1,
@@ -68,7 +73,7 @@ var _isOpen,
 	_upMoveEvents, // drag move, drag end & drag cancel events array
 	_downEvents, // drag start events array
 	_globalEventHandlers,
-	_viewportSize = {},
+	_viewportSize: Point = {},
 	_currZoomLevel,
 	_startZoomLevel,
 	_translatePrefix,
@@ -76,7 +81,7 @@ var _isOpen,
 	_updateSizeInterval,
 	_itemsNeedUpdate,
 	_currPositionIndex = 0,
-	_offset = {},
+	_offset: Point = {},
 	_slideSize = _getEmptyPoint(), // size of slide area, including spacing
 	_itemHolders,
 	_prevItemIndex,
@@ -97,7 +102,7 @@ var _isOpen,
 	_oldIE,
 	_currentWindowScrollY,
 	_features,
-	_windowVisibleSize = {},
+	_windowVisibleSize: Point = {},
 	_renderMaxResolution = false,
 	_orientationChangeTimeout,
 
@@ -126,13 +131,10 @@ var _isOpen,
 		}
 		return _listeners[name].push(fn);
 	},
-	_shout = function(name) {
+	_shout = function(name, ...args: any[]) {
 		var listeners = _listeners[name];
 
 		if(listeners) {
-			var args = Array.prototype.slice.call(arguments);
-			args.shift();
-
 			for(var i = 0; i < listeners.length; i++) {
 				listeners[i].apply(self, args);
 			}
@@ -147,14 +149,14 @@ var _isOpen,
 		self.bg.style.opacity = opacity * _options.bgOpacity;
 	},
 
-	_applyZoomTransform = function(styleObj,x,y,zoom,item) {
+	_applyZoomTransform = function(styleObj,x,y,zoom,item?) {
 		if(!_renderMaxResolution || (item && item !== self.currItem) ) {
 			zoom = zoom / (item ? item.fitRatio : self.currItem.fitRatio);	
 		}
 			
 		styleObj[_transformKey] = _translatePrefix + x + 'px, ' + y + 'px' + _translateSufix + ' scale(' + zoom + ')';
 	},
-	_applyCurrentZoomPan = function( allowRenderResolution ) {
+	_applyCurrentZoomPan = function( allowRenderResolution? ) {
 		if(_currZoomElementStyle) {
 
 			if(allowRenderResolution) {
@@ -188,7 +190,7 @@ var _isOpen,
 	_setTranslateX = function(x, elStyle) {
 		elStyle[_transformKey] = _translatePrefix + x + 'px, 0px' + _translateSufix;
 	},
-	_moveMainScroll = function(x, dragging) {
+	_moveMainScroll = function(x, dragging?) {
 
 		if(!_options.loop && dragging) {
 			var newSlideIndexOffset = _currentItemIndex + (_slideSize.x * _currPositionIndex - x) / _slideSize.x,
@@ -280,13 +282,13 @@ var _isOpen,
 		return bounds;
 	},
 	
-	_getMinZoomLevel = function(item) {
+	_getMinZoomLevel = function(item?) {
 		if(!item) {
 			item = self.currItem;
 		}
 		return item.initialZoomLevel;
 	},
-	_getMaxZoomLevel = function(item) {
+	_getMaxZoomLevel = function(item?) {
 		if(!item) {
 			item = self.currItem;
 		}
@@ -413,7 +415,7 @@ var _isOpen,
 
 
 // Micro animation engine
-var _animations = {},
+var _animations: any = {},
 	_numAnimations = 0,
 	_stopAnimation = function(name) {
 		if(_animations[name]) {
@@ -442,7 +444,7 @@ var _animations = {},
 			
 		}
 	},
-	_animateProp = function(name, b, endProp, d, easingFn, onUpdate, onComplete) {
+	_animateProp = function(name, b, endProp, d, easingFn, onUpdate, onComplete?) {
 		var startAnimTime = _getCurrentTime(), t;
 		_registerStartAnimation(name);
 
@@ -1001,7 +1003,7 @@ var publicMethods = {
 		}
 
 		var destPanBounds = _calculatePanBounds(destZoomLevel, false),
-			destPanOffset = {};
+			destPanOffset: Point = {};
 
 		_modifyDestPanOffset('x', destPanBounds, destPanOffset, destZoomLevel);
 		_modifyDestPanOffset('y', destPanBounds, destPanOffset, destZoomLevel);
