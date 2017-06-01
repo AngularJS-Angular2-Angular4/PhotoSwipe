@@ -93,7 +93,43 @@ module.exports = function(grunt) {
         }
       }
     },
-
+    
+    browserify: {
+    	"photoswipe-ui": {
+    		src: ['src/js/ui/photoswipe-ui-default.js'],
+    		dest: 'dist/photoswipe-ui-default.js',
+    		options: {
+    			browserifyOptions: {
+	    			//plugin: ["tsify"]
+	    			standalone: "PhotoSwipeUI_Default", 
+	    			bundleExternal: false, 
+	    			debug: false
+    			}
+    		}
+    	},/*
+    	"photoswipe": {
+    		src: ['src/js/*.js'],
+    		dest: 'dist/photoswipe.js',
+    		options: {
+    			browserifyOptions: {
+	    			//plugin: ["tsify"]
+	    			standalone: "PhotoSwipe", 
+	    			bundleExternal: false, 
+	    			debug: false
+    			}
+    		}
+    	}*/
+    },
+    file_append: {
+        default_options: {
+          files: [
+            {
+              prepend: "<%= defaultUIBanner %>",
+              input: 'dist/photoswipe-ui-default.js',
+            }
+          ]
+      }
+    },
     pswpbuild: {
       all: {
         src: [
@@ -271,9 +307,9 @@ module.exports = function(grunt) {
 
     grunt.file.write( this.data.dest, newContents );
 
-    var uiContents = grunt.file.read( basePath + 'ui/photoswipe-ui-default.js' );
-    uiContents = this.data.defaultUIBanner + uiContents;
-    grunt.file.write( this.data.uidest, uiContents );
+//    var uiContents = grunt.file.read( basePath + 'ui/photoswipe-ui-default.js' );
+//    uiContents = this.data.defaultUIBanner + uiContents;
+//    grunt.file.write( this.data.uidest, uiContents );
   });
 
 
@@ -281,6 +317,8 @@ module.exports = function(grunt) {
 
   // These plugins provide necessary tasks.
   grunt.loadNpmTasks('grunt-ts');
+  grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-file-append');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -295,10 +333,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-svgmin');
 
   // Default task.
-  grunt.registerTask('default', ['sass', 'ts:dev', 'autoprefixer', 'pswpbuild','uglify', 'copy', 'jekyll:dev']);
+  grunt.registerTask('default', ['sass', 'autoprefixer', 'ts:dev', 'browserify', 'file_append', 'pswpbuild','uglify', 'copy', 'jekyll:dev']);
 
-  grunt.registerTask('production', ['sass', 'ts:prod', 'autoprefixer', 'pswpbuild', 'uglify', 'copy', 'cssmin', 'jekyll:production']);
-  grunt.registerTask('nosite', ['sass', 'autoprefixer', 'pswpbuild', 'uglify']);
+  grunt.registerTask('production', ['sass', 'autoprefixer', 'ts:prod', 'browserify', 'file_append', 'pswpbuild', 'uglify', 'copy', 'cssmin', 'jekyll:production']);
+  grunt.registerTask('nosite', ['sass', 'autoprefixer', 'ts:prod', 'browserify', 'file_append', 'pswpbuild', 'uglify']);
   grunt.registerTask('hint', ['jshint']);
   grunt.registerTask('awsupload', ['aws_s3']);
 

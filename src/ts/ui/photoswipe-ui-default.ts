@@ -4,23 +4,8 @@
 * Built just using public methods/properties of PhotoSwipe.
 * 
 */
-declare var define, exports, module
-(function (root, factory) { 
-	if (typeof define === 'function' && define.amd) {
-		define(factory);
-	} else if (typeof exports === 'object') {
-		module.exports = factory();
-	} else {
-		root.PhotoSwipeUI_Default = factory();
-	}
-})(this, function () {
 
-	'use strict';
-
-
-
-var PhotoSwipeUI_Default =
- function(pswp, framework) {
+export = function PhotoSwipeUI_Default(pswp, framework) {
 
 	var ui = this;
 	var _overlayUIUpdated = false,
@@ -853,7 +838,3 @@ var PhotoSwipeUI_Default =
 
 
 };
-return PhotoSwipeUI_Default;
-
-
-});
