@@ -22,7 +22,7 @@ var _showOrHideTimeout,
 		
 		// dimensions of small thumbnail {x:,y:,w:}.
 		// Height is optional, as calculated based on large image.
-		var thumbBounds; 
+		var thumbBounds: Bounds; 
 		if(item.initialLayout) {
 			thumbBounds = item.initialLayout;
 			item.initialLayout = null;

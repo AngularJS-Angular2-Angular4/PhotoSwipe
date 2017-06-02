@@ -8,7 +8,9 @@
       "es5"
     ],
     "outDir": "src/js",
-    "removeComments": false
+    "removeComments": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "noImplicitAny": false
   },
   "compileOnSave": true,
   "include": [

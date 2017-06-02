@@ -61,12 +61,12 @@ var _getEmptyPoint = function() {
 		return {x:0,y:0}; 
 	};
 
-var _isOpen,
-	_isDestroying,
+var _isOpen: boolean,
+	_isDestroying: boolean,
 	_closedByScroll,
-	_currentItemIndex,
-	_containerStyle,
-	_containerShiftIndex,
+	_currentItemIndex: number,
+	_containerStyle: any,
+	_containerShiftIndex: number,
 	_currPanDist = _getEmptyPoint(),
 	_startPanOffset = _getEmptyPoint(),
 	_panOffset = _getEmptyPoint(),
@@ -74,46 +74,46 @@ var _isOpen,
 	_downEvents, // drag start events array
 	_globalEventHandlers,
 	_viewportSize: Point = {},
-	_currZoomLevel,
-	_startZoomLevel,
-	_translatePrefix,
-	_translateSufix,
+	_currZoomLevel: number,
+	_startZoomLevel: number,
+	_translatePrefix: string,
+	_translateSufix: string,
 	_updateSizeInterval,
 	_itemsNeedUpdate,
 	_currPositionIndex = 0,
 	_offset: Point = {},
 	_slideSize = _getEmptyPoint(), // size of slide area, including spacing
-	_itemHolders,
-	_prevItemIndex,
+	_itemHolders: ItemHolder[],
+	_prevItemIndex: number,
 	_indexDiff = 0, // difference of indexes since last content update
 	_dragStartEvent,
 	_dragMoveEvent,
 	_dragEndEvent,
 	_dragCancelEvent,
-	_transformKey,
+	_transformKey: string,
 	_pointerEventEnabled,
 	_isFixedPosition = true,
-	_likelyTouchDevice,
-	_modules = [],
-	_requestAF,
-	_cancelAF,
-	_initalClassName,
-	_initalWindowScrollY,
-	_oldIE,
-	_currentWindowScrollY,
-	_features,
+	_likelyTouchDevice: boolean,
+	_modules: string[] = [],
+	_requestAF: (callback: FrameRequestCallback) => number,
+	_cancelAF: (handle: number) => void,
+	_initalClassName: string,
+	_initalWindowScrollY: number,
+	_oldIE: boolean,
+	_currentWindowScrollY: number,
+	_features: Features,
 	_windowVisibleSize: Point = {},
 	_renderMaxResolution = false,
-	_orientationChangeTimeout,
+	_orientationChangeTimeout: number,
 
 
 	// Registers PhotoSWipe module (History, Controller ...)
-	_registerModule = function(name, module) {
+	_registerModule = function(name: string, module: {publicMethods: any}) {
 		framework.extend(self, module.publicMethods);
 		_modules.push(name);
 	},
 
-	_getLoopedId = function(index) {
+	_getLoopedId = function(index: number) {
 		var numSlides = _getNumItems();
 		if(index > numSlides - 1) {
 			return index - numSlides;
@@ -125,13 +125,13 @@ var _isOpen,
 	
 	// Micro bind/trigger
 	_listeners = {},
-	_listen = function(name, fn) {
+	_listen = function(name: string, fn: (...args: any[]) => void) {
 		if(!_listeners[name]) {
 			_listeners[name] = [];
 		}
 		return _listeners[name].push(fn);
 	},
-	_shout = function(name, ...args: any[]) {
+	_shout = function(name: string, ...args: any[]) {
 		var listeners = _listeners[name];
 
 		if(listeners) {
@@ -144,19 +144,19 @@ var _isOpen,
 	_getCurrentTime = function() {
 		return new Date().getTime();
 	},
-	_applyBgOpacity = function(opacity) {
+	_applyBgOpacity = function(opacity: number) {
 		_bgOpacity = opacity;
 		self.bg.style.opacity = opacity * _options.bgOpacity;
 	},
 
-	_applyZoomTransform = function(styleObj,x,y,zoom,item?) {
+	_applyZoomTransform = function(styleObj: any, x: number, y: number, zoom: number, item?: Item) {
 		if(!_renderMaxResolution || (item && item !== self.currItem) ) {
 			zoom = zoom / (item ? item.fitRatio : self.currItem.fitRatio);	
 		}
 			
 		styleObj[_transformKey] = _translatePrefix + x + 'px, ' + y + 'px' + _translateSufix + ' scale(' + zoom + ')';
 	},
-	_applyCurrentZoomPan = function( allowRenderResolution? ) {
+	_applyCurrentZoomPan = function( allowRenderResolution?: boolean ) {
 		if(_currZoomElementStyle) {
 
 			if(allowRenderResolution) {
@@ -177,7 +177,7 @@ var _isOpen,
 			_applyZoomTransform(_currZoomElementStyle, _panOffset.x, _panOffset.y, _currZoomLevel);
 		}
 	},
-	_applyZoomPanToItem = function(item) {
+	_applyZoomPanToItem = function(item: Item) {
 		if(item.container) {
 
 			_applyZoomTransform(item.container.style, 
@@ -187,10 +187,10 @@ var _isOpen,
 								item);
 		}
 	},
-	_setTranslateX = function(x, elStyle) {
+	_setTranslateX = function(x: number, elStyle: any) {
 		elStyle[_transformKey] = _translatePrefix + x + 'px, 0px' + _translateSufix;
 	},
-	_moveMainScroll = function(x, dragging?) {
+	_moveMainScroll = function(x: number, dragging?: boolean) {
 
 		if(!_options.loop && dragging) {
 			var newSlideIndexOffset = _currentItemIndex + (_slideSize.x * _currPositionIndex - x) / _slideSize.x,
@@ -205,24 +205,24 @@ var _isOpen,
 		_mainScrollPos.x = x;
 		_setTranslateX(x, _containerStyle);
 	},
-	_calculatePanOffset = function(axis, zoomLevel) {
+	_calculatePanOffset = function(axis: string, zoomLevel: number) {
 		var m = _midZoomPoint[axis] - _offset[axis];
 		return _startPanOffset[axis] + _currPanDist[axis] + m - m * ( zoomLevel / _startZoomLevel );
 	},
 	
-	_equalizePoints = function(p1, p2) {
+	_equalizePoints = function(p1: Point, p2: Point) {
 		p1.x = p2.x;
 		p1.y = p2.y;
 		if(p2.id) {
 			p1.id = p2.id;
 		}
 	},
-	_roundPoint = function(p) {
+	_roundPoint = function(p: Point) {
 		p.x = Math.round(p.x);
 		p.y = Math.round(p.y);
 	},
 
-	_mouseMoveTimeout = null,
+	_mouseMoveTimeout: number = null,
 	_onFirstMouseMove = function() {
 		// Wait until mouse move event is fired at least twice during 100ms
 		// We do this, because some mobile browsers trigger it on touchstart
@@ -333,7 +333,7 @@ var _isOpen,
 		_setTranslateX = function(x, elStyle) {
 			elStyle.left = x + 'px';
 		};
-		_applyZoomPanToItem = function(item) {
+		_applyZoomPanToItem = function(item: Item) {
 
 			var zoomRatio = item.fitRatio > 1 ? 1 : item.fitRatio,
 				s = item.container.style,

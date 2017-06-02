@@ -7,8 +7,8 @@
 var MIN_SWIPE_DISTANCE = 30,
 	DIRECTION_CHECK_OFFSET = 10; // amount of pixels to drag to determine direction of swipe
 
-var _gestureStartTime,
-	_gestureCheckSpeedTime,
+var _gestureStartTime: number,
+	_gestureCheckSpeedTime: number,
 
 	// pool of objects that are used during dragging of zooming
 	p: Point = {}, // first point
@@ -16,47 +16,47 @@ var _gestureStartTime,
 	delta: Point = {},
 	_currPoint: Point = {},
 	_startPoint: Point = {},
-	_currPointers = [],
+	_currPointers: Point[] = [],
 	_startMainScrollPos: Point = {},
 	_releaseAnimData,
 	_posPoints: Point[] = [], // array of points during dragging, used to determine type of gesture
 	_tempPoint: Point = {},
 
-	_isZoomingIn,
-	_verticalDragInitiated,
+	_isZoomingIn: boolean,
+	_verticalDragInitiated: boolean,
 	_oldAndroidTouchEndTimeout,
 	_currZoomedItemIndex = 0,
 	_centerPoint = _getEmptyPoint(),
 	_lastReleaseTime = 0,
-	_isDragging, // at least one pointer is down
-	_isMultitouch, // at least two _pointers are down
-	_zoomStarted, // zoom level changed during zoom gesture
-	_moved,
+	_isDragging: boolean, // at least one pointer is down
+	_isMultitouch: boolean, // at least two _pointers are down
+	_zoomStarted: boolean, // zoom level changed during zoom gesture
+	_moved: boolean,
 	_dragAnimFrame,
 	_mainScrollShifted,
-	_currentPoints, // array of current touch points
-	_isZooming,
+	_currentPoints: TouchPoint[], // array of current touch points
+	_isZooming: boolean,
 	_currPointsDistance,
 	_startPointsDistance,
 	_currPanBounds,
 	_mainScrollPos = _getEmptyPoint(),
-	_currZoomElementStyle,
+	_currZoomElementStyle: any,
 	_mainScrollAnimating, // true, if animation after swipe gesture is running
 	_midZoomPoint = _getEmptyPoint(),
 	_currCenterPoint = _getEmptyPoint(),
 	_direction,
-	_isFirstMove,
+	_isFirstMove: boolean,
 	_opacityChanged,
 	_bgOpacity,
 	_wasOverInitialZoom,
 
-	_isEqualPoints = function(p1, p2) {
+	_isEqualPoints = function(p1: Point, p2: Point) {
 		return p1.x === p2.x && p1.y === p2.y;
 	},
-	_isNearbyPoints = function(touch0, touch1) {
+	_isNearbyPoints = function(touch0: TouchPoint, touch1: TouchPoint) {
 		return Math.abs(touch0.x - touch1.x) < DOUBLE_TAP_RADIUS && Math.abs(touch0.y - touch1.y) < DOUBLE_TAP_RADIUS;
 	},
-	_calculatePointsDistance = function(p1, p2) {
+	_calculatePointsDistance = function(p1: Point, p2: Point) {
 		_tempPoint.x = Math.abs( p1.x - p2.x );
 		_tempPoint.y = Math.abs( p1.y - p2.y );
 		return Math.sqrt(_tempPoint.x * _tempPoint.x + _tempPoint.y * _tempPoint.y);
@@ -130,7 +130,7 @@ var _gestureStartTime,
 
 	
 	// points pool, reused during touch events
-	_ePoint1: PointWithId = {},
+	_ePoint1: Point = {},
 	_ePoint2 = {},
 	_tempPointsArr = [],
 	_tempCounter,
@@ -633,7 +633,7 @@ var _gestureStartTime,
 			e.preventDefault();
 		}
 
-		var releasePoint;
+		var releasePoint: TouchPoint;
 
 		if(_pointerEventEnabled) {
 			var pointerIndex = framework.arraySearch(_currPointers, e.pointerId, 'id');

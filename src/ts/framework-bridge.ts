@@ -6,7 +6,7 @@
  * 
  */
 var framework = {
-	features: null,
+	features: null as Features,
 	bind: function(target, type, listener, unbind?) {
 		var methodName = (unbind ? 'remove' : 'add') + 'EventListener';
 		type = type.split(' ');
@@ -121,7 +121,7 @@ var framework = {
 	 * }
 	 * 
 	 */
-	detectFeatures: function() {
+	detectFeatures: function(): Features {
 		if(framework.features) {
 			return framework.features;
 		}

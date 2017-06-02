@@ -5,9 +5,9 @@
  * 
  */
 
-var tapTimer,
-	tapReleasePoint = {},
-	_dispatchTapEvent = function(origEvent, releasePoint, pointerType?) {		
+var tapTimer: number,
+	tapReleasePoint: Point = {},
+	_dispatchTapEvent = function(origEvent: CustomEvent, releasePoint: TouchPoint, pointerType?: string) {		
 		var e = document.createEvent( 'CustomEvent' ),
 			eDetail = {
 				origEvent:origEvent, 
@@ -30,13 +30,13 @@ _registerModule('Tap', {
 				tapTimer = null;
 			});
 		},
-		onTapStart: function(touchList) {
+		onTapStart: function(touchList: any[]) {
 			if(touchList.length > 1) {
 				clearTimeout(tapTimer);
 				tapTimer = null;
 			}
 		},
-		onTapRelease: function(e, releasePoint) {
+		onTapRelease: function(e: CustomEvent, releasePoint: TouchPoint) {
 			if(!releasePoint) {
 				return;
 			}
@@ -59,7 +59,7 @@ _registerModule('Tap', {
 					return;
 				}
 
-				var clickedTagName = e.target.tagName.toUpperCase();
+				var clickedTagName = (<any>e.target).tagName.toUpperCase();
 				// avoid double tap delay on buttons and elements that have class pswp__single-tap
 				if(clickedTagName === 'BUTTON' || framework.hasClass(e.target, 'pswp__single-tap') ) {
 					_dispatchTapEvent(e, releasePoint);

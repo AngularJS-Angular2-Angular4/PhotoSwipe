@@ -21,7 +21,7 @@ var _items,
 
 
 var _getItemAt,
-	_getNumItems,
+	_getNumItems: () => number,
 	_initialIsLoop,
 	_getZeroBounds = function() {
 		return {
@@ -479,7 +479,7 @@ _registerModule('Controller', {
 			holder.el.appendChild(baseDiv);
 		},
 
-		cleanSlide: function( item ) {
+		cleanSlide: function( item: Item ) {
 			if(item.img ) {
 				item.img.onload = item.img.onerror = null;
 			}
