@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES5",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "es5"
+    ],
+    "outDir": "src/js",
+    "removeComments": false
+  },
+  "compileOnSave": true,
+  "include": [
+    "src/ts/**/*.ts"
+  ]
+}
